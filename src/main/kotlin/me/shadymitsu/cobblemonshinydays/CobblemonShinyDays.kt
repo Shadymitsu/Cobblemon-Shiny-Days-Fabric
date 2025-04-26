@@ -33,15 +33,17 @@ class CobblemonShinyDays : ModInitializer {
 
         val config = ConfigLoader.loadConfig()
         val multiplier = config.firstOrNull {
-            (it.species.contains("ALL") ||
-                    it.species.any { s -> s.equals(speciesName, ignoreCase = true) }) &&
-                    it.days.any { configDay -> configDay.equals(day, ignoreCase = true) }
+            // Check if species matches "ALL" or if specific species match
+            (it.species.contains("ALL") || it.species.any { s -> s.equals(speciesName, ignoreCase = true) }) &&
+                    // Check if the day is part of the active days
+                    it.days.any { configDay -> configDay.equals(day, ignoreCase = true) } ||
+                    // Check if any label matches using hasLabels()
+                    it.labels.any { label -> event.pokemon.hasLabels(label) }
         }?.multiplier
 
         if (multiplier != null) {
-            event.addModificationFunction { base, _, _ ->
-                base / multiplier }
+            // Apply the multiplier to the shiny calculation event
+            event.addModificationFunction { base, _, _ -> base / multiplier }
         }
     }
 }
-

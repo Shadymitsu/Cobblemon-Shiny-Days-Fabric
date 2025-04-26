@@ -9,14 +9,7 @@ object ConfigCreator {
     private val configFile = File("config/cobblemonshinydays/config.json")
 
     fun createDefaultConfig() {
-        val defaultConfig = listOf(
-            ConfigFields(
-                species = listOf("ALL"),
-                days = listOf("Saturday", "Sunday"),
-                multiplier = 1.0f,
-                broadcastInterval = 60 // Set default interval to 60 seconds (1 minute)
-            )
-        )
+        val defaultConfig = getDefaultConfig()
         saveConfig(defaultConfig)
     }
 
@@ -31,10 +24,46 @@ object ConfigCreator {
     fun getDefaultConfig(): List<ConfigFields> {
         return listOf(
             ConfigFields(
-                species = listOf("ALL"),
+                species = listOf("Pikachu", "Bulbasaur", "Charmander", "Squirtle"),
+                labels = listOf("legendary", "mythical"),
                 days = listOf("Saturday", "Sunday"),
-                multiplier = 1.0f,
-                broadcastInterval = 60 // Default interval for broadcast (1 minute)
+                multiplier = 5.0f,
+                broadcastInterval = 300
+            ),
+            ConfigFields(
+                species = emptyList(),
+                labels = listOf("gen1"),
+                days = listOf("Monday"),
+                multiplier = 2.0f,
+                broadcastInterval = 300
+            ),
+            ConfigFields(
+                species = emptyList(),
+                labels = listOf("gen2"),
+                days = listOf("Tuesday"),
+                multiplier = 2.0f,
+                broadcastInterval = 300
+            ),
+            ConfigFields(
+                species = emptyList(),
+                labels = listOf("gen3"),
+                days = listOf("Wednesday"),
+                multiplier = 2.0f,
+                broadcastInterval = 300
+            ),
+            ConfigFields(
+                species = emptyList(),
+                labels = listOf("gen4"),
+                days = listOf("Thursday"),
+                multiplier = 2.0f,
+                broadcastInterval = 300
+            ),
+            ConfigFields(
+                species = emptyList(),
+                labels = listOf("gen5"),
+                days = listOf("Friday"),
+                multiplier = 2.0f,
+                broadcastInterval = 300
             )
         )
     }

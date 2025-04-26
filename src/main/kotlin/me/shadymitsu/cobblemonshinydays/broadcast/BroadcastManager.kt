@@ -11,6 +11,46 @@ object BroadcastManager {
 
     private val scheduler = Executors.newSingleThreadScheduledExecutor()
 
+    // Map of label keys to nicely formatted names
+    private val labelDisplayNames = mapOf(
+        "legendary" to "Legendary",
+        "restricted" to "Restricted",
+        "mythical" to "Mythical",
+        "ultra_beast" to "Ultra Beast",
+        "fossil" to "Fossil",
+        "powerhouse" to "Powerhouse",
+        "baby" to "Baby",
+        "regional" to "Regional",
+        "kantonian_form" to "Kantonian Form",
+        "johtonian_form" to "Johtonian Form",
+        "hoennian_form" to "Hoennian Form",
+        "sinnohan_form" to "Sinnohan Form",
+        "unovan_form" to "Unovan Form",
+        "kalosian_form" to "Kalosian Form",
+        "alolan_form" to "Alolan Form",
+        "galarian_form" to "Galarian Form",
+        "hisuian_form" to "Hisuian Form",
+        "paldean_form" to "Paldean Form",
+        "mega" to "Mega",
+        "primal" to "Primal",
+        "gmax" to "G-Max",
+        "totem" to "Totem",
+        "paradox" to "Paradox",
+        "gen1" to "Gen 1",
+        "gen2" to "Gen 2",
+        "gen3" to "Gen 3",
+        "gen4" to "Gen 4",
+        "gen5" to "Gen 5",
+        "gen6" to "Gen 6",
+        "gen7" to "Gen 7",
+        "gen7b" to "Gen 7b",
+        "gen8" to "Gen 8",
+        "gen8a" to "Gen 8a",
+        "gen9" to "Gen 9",
+        "customized_official" to "Customized",
+        "custom" to "Custom"
+    )
+
     fun startBroadcasting() {
         val config = ConfigLoader.loadConfig()
 
@@ -24,23 +64,39 @@ object BroadcastManager {
                 val currentDay = now.dayOfWeek.name
 
                 entries.forEach { entry ->
-                    // Handle case-insensitive day matching
                     val isActiveDay = entry.days.any { it.equals(currentDay, ignoreCase = true) }
 
                     if (isActiveDay) {
-                        // For species, handle comma separation and "and" between last two species
-                        val speciesText = when {
-                            entry.species.any { it.equals("ALL", ignoreCase = true) } -> "all Pokémon"
-                            entry.species.size > 1 -> {
-                                val lastPokemon = entry.species.last()
-                                val allButLast = entry.species.dropLast(1).joinToString(", ")
-                                "$allButLast and $lastPokemon"
+                        val speciesPart = entry.species
+                            .filterNot { it.equals("ALL", ignoreCase = true) }
+                            .joinToString(", ") { "§d$it" }
+
+                        val labelsPart = entry.labels
+                            .mapNotNull { labelDisplayNames[it.lowercase()] }
+                            .joinToString(", ") { "§b$it" }
+
+                        val fullList = listOfNotNull(
+                            speciesPart.takeIf { it.isNotEmpty() },
+                            labelsPart.takeIf { it.isNotEmpty() }
+                        )
+
+                        val combined = when (fullList.size) {
+                            0 -> null
+                            1 -> fullList.first()
+                            else -> {
+                                val parts = fullList.flatMap { it.split(", ") }
+                                when (parts.size) {
+                                    1 -> parts[0]
+                                    2 -> "${parts[0]} §eor ${parts[1]}"
+                                    else -> parts.dropLast(1).joinToString("§e, ") + " §eor ${parts.last()}"
+                                }
                             }
-                            else -> entry.species.first() // If only one species is listed
                         }
 
-                        val message = "§eToday is a §6Shiny Day! §5$speciesText §ehave increased shiny rates!"
-                        broadcastToServer(message)
+                        if (combined != null) {
+                            val message = "§eToday is a §6Shiny Day! §eIf you're lucky you may encounter a shiny $combined §ePokémon!"
+                            broadcastToServer(message)
+                        }
                     }
                 }
             }, 0, intervalSeconds!!.toLong(), TimeUnit.SECONDS)
@@ -58,5 +114,4 @@ object BroadcastManager {
         scheduler.shutdownNow()
         println("Cobblemon Shiny Days: Broadcast scheduler shut down successfully.")
     }
-
 }
