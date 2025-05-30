@@ -24,6 +24,7 @@ The configuration has 5 customisable options
 
 - "species" : which Pokémon will have increased rates (can use "ALL" to increase odds of all Pokémon)
 - "labels" : Pokémon with these labels will have their shiny rates increased ("legendary", "gen1", "gen2" etc.)
+- "types" : Pokémon with these types will have their shiny rates increased ("water", "fire" etc.)
 - "days" : which days to apply the specified rates to the specified Pokémon
 - "multiplier" : how much to multiply odds by (uses the shiny rates in your Cobblemon config as a base rate, then adds this modifier) *e.g. Cobblemon shiny rate is 1/8192, a multiplier of 2.0 will make the rate 1/4096*
 - "broadcastInterval" : how often to send the broadcast (in seconds) letting players know which Pokémon have increased shiny rates.
@@ -35,6 +36,7 @@ The configuration has 5 customisable options
   {
     "species": ["Pikachu", "Bulbasaur", "Charmander", "Squirtle"],
     "labels": ["legendary", "mythical"],
+    "types": ["normal"],
     "days": ["Saturday", "Sunday"],
     "multiplier": 5.0,
     "broadcastInterval": 300
@@ -42,6 +44,7 @@ The configuration has 5 customisable options
   {
     "species": [],
     "labels": ["gen1"],
+    "types": ["water"],
     "days": ["Monday"],
     "multiplier": 2.0,
     "broadcastInterval": 300
@@ -49,6 +52,7 @@ The configuration has 5 customisable options
   {
     "species": [],
     "labels": ["gen2"],
+    "types": ["fire"],
     "days": ["Tuesday"],
     "multiplier": 2.0,
     "broadcastInterval": 300
@@ -56,6 +60,7 @@ The configuration has 5 customisable options
   {
     "species": [],
     "labels": ["gen3"],
+    "types": ["grass"],
     "days": ["Wednesday"],
     "multiplier": 2.0,
     "broadcastInterval": 300
@@ -63,6 +68,7 @@ The configuration has 5 customisable options
   {
     "species": [],
     "labels": ["gen4"],
+    "types": ["psychic"],
     "days": ["Thursday"],
     "multiplier": 2.0,
     "broadcastInterval": 300
@@ -70,6 +76,7 @@ The configuration has 5 customisable options
   {
     "species": [],
     "labels": ["gen5"],
+    "types": ["steel"],
     "days": ["Friday"],
     "multiplier": 2.0,
     "broadcastInterval": 300
@@ -79,17 +86,17 @@ The configuration has 5 customisable options
 ```
 The config above would work as follows
 
-**Saturday and Sunday** - Pikachu, Bulbasaur, Charmander, Squirtle and all legendary and mythical Pokemon have 5x shiny rates
+**Saturday and Sunday** - Pikachu, Bulbasaur, Charmander, Squirtle, Normal-type, legendary and mythical Pokemon have 5x shiny rates
 
-**Monday** - All Gen 1 Pokemon have 2x shiny rates
+**Monday** - All Gen 1 & Water-type Pokemon have 2x shiny rates
 
-**Tuesday** - All Gen 2 Pokemon have 2x shiny rates
+**Tuesday** - All Gen 2 & Fire-type Pokemon have 2x shiny rates
 
-**Wednesday** - All Gen 3 Pokemon have 2x shiny rates
+**Wednesday** - All Gen 3 & Grass-type Pokemon have 2x shiny rates
 
-**Thursday** - All Gen 4 Pokemon have 2x shiny rates
+**Thursday** - All Gen 4 & Psychic-type Pokemon have 2x shiny rates
 
-**Friday** - All Gen 5 Pokemon have 2x shiny rates
+**Friday** - All Gen 5 & Steel-type Pokemon have 2x shiny rates
 
 ## Authors
 
