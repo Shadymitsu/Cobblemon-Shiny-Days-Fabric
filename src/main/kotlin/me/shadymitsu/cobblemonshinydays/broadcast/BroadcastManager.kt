@@ -11,7 +11,7 @@ object BroadcastManager {
 
     private val scheduler = Executors.newSingleThreadScheduledExecutor()
 
-    // Map of label keys to nicely formatted names
+    // Mapping of labels to nicely formatted names
     private val labelDisplayNames = mapOf(
         "legendary" to "Legendary",
         "restricted" to "Restricted",
@@ -33,7 +33,7 @@ object BroadcastManager {
         "paldean_form" to "Paldean Form",
         "mega" to "Mega",
         "primal" to "Primal",
-        "gmax" to "G-Max",
+        "gmax" to "Gigantamax",
         "totem" to "Totem",
         "paradox" to "Paradox",
         "gen1" to "Gen 1",
@@ -47,8 +47,30 @@ object BroadcastManager {
         "gen8" to "Gen 8",
         "gen8a" to "Gen 8a",
         "gen9" to "Gen 9",
-        "customized_official" to "Customized",
+        "customized_official" to "Customized Official",
         "custom" to "Custom"
+    )
+
+    // Display names for elemental types
+    private val typeDisplayNames = mapOf(
+        "normal" to "Normal",
+        "fire" to "Fire",
+        "water" to "Water",
+        "electric" to "Electric",
+        "grass" to "Grass",
+        "ice" to "Ice",
+        "fighting" to "Fighting",
+        "poison" to "Poison",
+        "ground" to "Ground",
+        "flying" to "Flying",
+        "psychic" to "Psychic",
+        "bug" to "Bug",
+        "rock" to "Rock",
+        "ghost" to "Ghost",
+        "dragon" to "Dragon",
+        "dark" to "Dark",
+        "steel" to "Steel",
+        "fairy" to "Fairy"
     )
 
     fun startBroadcasting() {
@@ -67,40 +89,45 @@ object BroadcastManager {
                     val isActiveDay = entry.days.any { it.equals(currentDay, ignoreCase = true) }
 
                     if (isActiveDay) {
-                        val speciesPart = entry.species
+                        val hasAllSpecies = entry.species.any { it.equals("ALL", ignoreCase = true) }
+
+                        val speciesFormatted = entry.species
                             .filterNot { it.equals("ALL", ignoreCase = true) }
-                            .joinToString(", ") { "§d$it" }
+                            .map { "§5$it" }
 
-                        val labelsPart = entry.labels
-                            .mapNotNull { labelDisplayNames[it.lowercase()] }
-                            .joinToString(", ") { "§b$it" }
+                        val labelFormatted = entry.labels
+                            .mapNotNull { formatLabel(it)?.let { formatted -> "§5$formatted" } }
 
-                        val fullList = listOfNotNull(
-                            speciesPart.takeIf { it.isNotEmpty() },
-                            labelsPart.takeIf { it.isNotEmpty() }
-                        )
+                        val typeFormatted = entry.types
+                            .mapNotNull { formatType(it)?.let { formatted -> "§5$formatted" } }
 
-                        val combined = when (fullList.size) {
-                            0 -> null
-                            1 -> fullList.first()
-                            else -> {
-                                val parts = fullList.flatMap { it.split(", ") }
-                                when (parts.size) {
-                                    1 -> parts[0]
-                                    2 -> "${parts[0]} §eor ${parts[1]}"
-                                    else -> parts.dropLast(1).joinToString("§e, ") + " §eor ${parts.last()}"
-                                }
-                            }
+                        val allTerms = speciesFormatted + labelFormatted + typeFormatted
+                        val joined = when (allTerms.size) {
+                            0 -> ""
+                            1 -> allTerms[0]
+                            2 -> "${allTerms[0]}§r or ${allTerms[1]}"
+                            else -> allTerms.dropLast(1).joinToString("§r, ") + "§r or ${allTerms.last()}"
                         }
 
-                        if (combined != null) {
-                            val message = "§eToday is a §6Shiny Day! §eIf you're lucky you may encounter a shiny $combined §ePokémon!"
-                            broadcastToServer(message)
+                        val message = if (hasAllSpecies) {
+                            "§eToday is a §6Shiny Day! §eIf you're lucky, you may encounter a shiny Pokémon!"
+                        } else {
+                            "§eToday is a §6Shiny Day! §eIf you're lucky, you may encounter a shiny $joined §ePokémon!"
                         }
+
+                        broadcastToServer(message)
                     }
                 }
             }, 0, intervalSeconds!!.toLong(), TimeUnit.SECONDS)
         }
+    }
+
+    fun formatLabel(label: String): String? {
+        return labelDisplayNames[label.lowercase()]
+    }
+
+    fun formatType(type: String): String? {
+        return typeDisplayNames[type.lowercase()]
     }
 
     private fun broadcastToServer(message: String) {

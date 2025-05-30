@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.shadymitsu"
-version = "1.0.2-fabric"
+version = "1.1.0-fabric"
 
 architectury {
     platformSetupLoomIde()
