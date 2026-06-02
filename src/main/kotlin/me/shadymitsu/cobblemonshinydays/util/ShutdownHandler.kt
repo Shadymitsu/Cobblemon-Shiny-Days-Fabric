@@ -7,7 +7,7 @@ object ShutdownHandler {
 
     fun registerShutdownListener() {
         ServerLifecycleEvents.SERVER_STOPPING.register { _ ->
-            println("CobblemonShinyDays: Server is stopping, shutting down scheduler...")
+            println("CobblemonShinyDays: El servidor se está deteniendo, cerrando el programador...")
             BroadcastManager.shutdown()
         }
     }

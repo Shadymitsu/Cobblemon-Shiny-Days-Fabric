@@ -21,6 +21,7 @@ repositories {
     mavenCentral()
     maven(url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
     maven("https://maven.impactdev.net/repository/development/")
+    maven("https://maven.nucleoid.xyz")
 }
 
 dependencies {
@@ -33,6 +34,11 @@ dependencies {
 
     modImplementation("net.fabricmc:fabric-language-kotlin:1.12.3+kotlin.2.0.21")
     modImplementation("com.cobblemon:fabric:1.6.0+1.21.1-SNAPSHOT")
+
+    modImplementation("eu.pb4:polymer-core:0.9.19+1.21.1")
+    include("eu.pb4:polymer-core:0.9.19+1.21.1")
+    modImplementation("eu.pb4:polymer-resource-pack:0.9.19+1.21.1")
+    include("eu.pb4:polymer-resource-pack:0.9.19+1.21.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
